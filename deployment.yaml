@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: my-app
 spec:
-  replicas: 2
+  replicas: 2  # يمكنك تعديل العدد حسب الحاجة
   selector:
     matchLabels:
       app: my-app
@@ -14,8 +14,11 @@ spec:
     spec:
       containers:
         - name: my-app
-          image: 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:latest
+          image: 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:latest  # تأكد من استخدام أحدث صورة
           ports:
-            - containerPort: 8080 
-          
-
+            - containerPort: 8080
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1  # عدد البودات الجديدة التي سيتم نشرها أثناء التحديث
+      maxUnavailable: 1  # عدد البودات التي يمكن أن تكون غير متاحة أثناء التحديث

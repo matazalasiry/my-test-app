@@ -3,7 +3,7 @@ name: CI/CD Pipeline with EKS and Cloudflare
 on:
   push:
     branches:
-      - main  # الفرع الذي تقوم بالدفع عليه
+      - main  # الفرع الذي يتم الدفع عليه
 
 jobs:
   build_and_deploy:
@@ -34,7 +34,7 @@ jobs:
       env:
         AWS_REGION: us-east-1  # تحديد المنطقة بشكل صريح
 
-    # 5. Build and push Docker image to ECR
+    # 5. Build and Push Docker Image
     - name: Build and Push Docker Image
       run: |
         docker build -t 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:$GITHUB_SHA .
@@ -46,7 +46,7 @@ jobs:
     - name: Check if nodes exist in EKS
       run: |
         kubectl get nodes || (echo "No nodes found. Creating a new node group..." && \
-        aws eks create-nodegroup --cluster-name mataz-cluster --nodegroup-name my-node-group2 \
+        aws eks create-nodegroup --cluster-name mataz-cluster --nodegroup-name my-node-group \
         --node-role arn:aws:iam::123012261664:role/EKS-Node --subnets subnet-0175989c66fc0d32d subnet-0385591dd7d3cc1aa subnet-054b0fc732b88b22f \
         --instance-types t3.small --scaling-config minSize=1,maxSize=3,desiredSize=2 --region us-east-1)
 
