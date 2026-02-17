@@ -51,5 +51,5 @@ jobs:
       run: |
         echo "$KUBE_CONFIG" > kubeconfig.yaml  # تخزين محتويات kubeconfig في ملف مؤقت
         aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION --kubeconfig kubeconfig.yaml  # تحديث kubeconfig
-        kubectl --kubeconfig kubeconfig.yaml apply -f kubernetes/deployment.yaml  # نشر التطبيق
-        kubectl --kubeconfig kubeconfig.yaml apply -f kubernetes/service.yaml  # نشر الخدمة
+        kubectl --kubeconfig kubeconfig.yaml apply -f deployment.yaml  # نشر التطبيق
+        kubectl --kubeconfig kubeconfig.yaml apply -f service.yaml  # نشر الخدمة
