@@ -30,7 +30,7 @@ jobs:
     - name: Log in to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v1
       with:
-        registries: 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo  # تحديد المستودع في سطر واحد
+        registries: 123012261664
       env:
         AWS_REGION: us-east-1  # تحديد المنطقة بشكل صريح
 
