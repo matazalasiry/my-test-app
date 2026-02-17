@@ -22,7 +22,9 @@ jobs:
     - name: Log in to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v1
       with:
-        region: us-east-1  # تم تحديد المنطقة us-east-1 بشكل صريح
+        registries: 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo  # تحديد المستودع في سطر واحد
+      env:
+        AWS_REGION: us-east-1  # تحديد المنطقة بشكل صريح
 
     # 4. Build and push Docker image to ECR
     - name: Build and Push Docker Image
