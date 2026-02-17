@@ -1,12 +1,17 @@
-# اختر إصدار Node.js 16.7 أو أعلى
-FROM node:16.7
+# اختر صورة Python بسيطة
+FROM python:3.9-slim
 
+# إعداد المجلد داخل الحاوية
 WORKDIR /app
 
+# نسخ الملفات إلى الحاوية
 COPY . .
 
-RUN npm install
+# تثبيت التبعيات
+RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8080
+# تعيين المنفذ
+EXPOSE 5000
 
-CMD ["npm", "start"]
+# تشغيل التطبيق
+CMD ["python", "app.py"]

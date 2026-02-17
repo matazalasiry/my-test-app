@@ -1,24 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app
+  name: my-flask-app
 spec:
-  replicas: 2  # يمكنك تعديل العدد حسب الحاجة
+  replicas: 2
   selector:
     matchLabels:
-      app: my-app
+      app: my-flask-app
   template:
     metadata:
       labels:
-        app: my-app
+        app: my-flask-app
     spec:
       containers:
-        - name: my-app
-          image: 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:latest  # تأكد من استخدام أحدث صورة
+        - name: my-flask-app
+          image: 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:latest
           ports:
-            - containerPort: 8080
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1  # عدد البودات الجديدة التي سيتم نشرها أثناء التحديث
-      maxUnavailable: 1  # عدد البودات التي يمكن أن تكون غير متاحة أثناء التحديث
+            - containerPort: 5000
