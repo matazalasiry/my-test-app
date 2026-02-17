@@ -53,6 +53,12 @@ jobs:
           aws eks create-nodegroup --cluster-name mataz-cluster --nodegroup-name my-node-group \
           --node-role arn:aws:iam::123012261664:role/EKS-Node --subnets subnet-0175989c66fc0d32d subnet-0385591dd7d3cc1aa subnet-054b0fc732b88b22f \
           --instance-types t3.small --scaling-config minSize=1,maxSize=3,desiredSize=2 --region us-east-1
+          if [ $? -eq 0 ]; then
+            echo "Node group my-node-group created successfully."
+          else
+            echo "Failed to create Node group."
+            exit 1
+          fi
         fi
 
     # 7. Deploy to EKS using kubectl
