@@ -18,7 +18,15 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-    # 3. Log in to Amazon ECR
+    # 3. Configure AWS credentials
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # استخدم Secret لـ AWS_ACCESS_KEY_ID
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # استخدم Secret لـ AWS_SECRET_ACCESS_KEY
+        aws-region: us-east-1  # حدد المنطقة التي تعمل عليها (مثل `us-east-1`)
+
+    # 4. Log in to Amazon ECR
     - name: Log in to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v1
       with:
@@ -26,7 +34,7 @@ jobs:
       env:
         AWS_REGION: us-east-1  # تحديد المنطقة بشكل صريح
 
-    # 4. Build and push Docker image to ECR
+    # 5. Build and push Docker image to ECR
     - name: Build and Push Docker Image
       run: |
         docker build -t 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:$GITHUB_SHA .
@@ -34,7 +42,7 @@ jobs:
         docker push 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:$GITHUB_SHA
         docker push 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:latest
 
-    # 5. Deploy to EKS using kubectl
+    # 6. Deploy to EKS using kubectl
     - name: Deploy to EKS using kubectl
       env:
         KUBECONFIG: ${{ secrets.KUBE_CONFIG }}  # يتم استخدام kubeconfig من secrets
