@@ -45,7 +45,7 @@ jobs:
     # 6. Check if Node Group exists in EKS
     - name: Check if Node Group exists in EKS
       run: |
-        NODEGROUP_EXISTS=$(aws eks describe-nodegroup --cluster-name mataz-cluster --nodegroup-name my-node-group --query "nodegroup.nodegroupName" --output text)
+        NODEGROUP_EXISTS=$(aws eks describe-nodegroup --cluster-name mataz-cluster --nodegroup-name my-node-group --query "nodegroup.nodegroupName" --output text || echo "Node Group not found")
         if [ "$NODEGROUP_EXISTS" == "my-node-group" ]; then
           echo "Node group my-node-group exists, continuing with deployment..."
         else
