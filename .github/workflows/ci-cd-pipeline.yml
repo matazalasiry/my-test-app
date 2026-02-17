@@ -18,23 +18,37 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-    # 3. Log in to Amazon ECR
+    # 3. Configure AWS credentials
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # استخدم Secret لـ AWS_ACCESS_KEY_ID
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # استخدم Secret لـ AWS_SECRET_ACCESS_KEY
+        aws-region: us-east-1  # حدد المنطقة التي تعمل عليها (مثل `us-east-1`)
+
+    # 4. Log in to Amazon ECR
     - name: Log in to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v1
+      with:
+        registries: 123012261664
+      env:
+        AWS_REGION: us-east-1  # تحديد المنطقة بشكل صريح
 
-    # 4. Build and push Docker image to ECR
+    # 5. Build and push Docker image to ECR
     - name: Build and Push Docker Image
       run: |
-        docker build -t ${{ secrets.ECR_REPO }}:$GITHUB_SHA .
-        docker tag ${{ secrets.ECR_REPO }}:$GITHUB_SHA ${{ secrets.ECR_REPO }}:latest
-        docker push ${{ secrets.ECR_REPO }}:$GITHUB_SHA
-        docker push ${{ secrets.ECR_REPO }}:latest
+        docker build -t 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:$GITHUB_SHA .
+        docker tag 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:$GITHUB_SHA 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:latest
+        docker push 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:$GITHUB_SHA
+        docker push 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:latest
 
-    # 5. Deploy to EKS using kubectl
+    # 6. Deploy to EKS using kubectl
     - name: Deploy to EKS using kubectl
       env:
-        KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
+        KUBECONFIG: ${{ secrets.KUBE_CONFIG }}  # يتم استخدام kubeconfig من secrets
+        AWS_REGION: us-east-1  # تم تحديد المنطقة us-east-1 بشكل صريح
+        EKS_CLUSTER_NAME: mataz-cluster  # اسم مجموعة EKS
       run: |
-        aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+        aws eks update-kubeconfig --name mataz-cluster --region us-east-1
         kubectl apply -f kubernetes/deployment.yaml
         kubectl apply -f kubernetes/service.yaml
