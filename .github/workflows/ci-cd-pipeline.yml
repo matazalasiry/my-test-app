@@ -1,4 +1,4 @@
-name: CI/CD Pipeline with EKS and Cloudflare
+name: CI/CD Pipeline with EKS and Flask
 
 on:
   push:
@@ -37,20 +37,20 @@ jobs:
     # 5. Build and Push Docker Image
     - name: Build and Push Docker Image
       run: |
-        docker build -t 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:$GITHUB_SHA .
-        docker tag 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:$GITHUB_SHA 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:latest
-        docker push 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:$GITHUB_SHA
-        docker push 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-app-repo:latest
+        docker build -t 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:$GITHUB_SHA .
+        docker tag 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:$GITHUB_SHA 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:latest
+        docker push 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:$GITHUB_SHA
+        docker push 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:latest
 
-    # 6. Check if nodes exist in EKS
+    # 6. Check if Node Group exists in EKS
     - name: Check if Node Group exists in EKS
       run: |
-        NODEGROUP_EXISTS=$(aws eks describe-nodegroup --cluster-name mataz-cluster --nodegroup-name my-node-group2 --query "nodegroup.nodegroupName" --output text)
-        if [ "$NODEGROUP_EXISTS" == "my-node-group2" ]; then
-          echo "Node group2 exists, continuing with deployment..."
+        NODEGROUP_EXISTS=$(aws eks describe-nodegroup --cluster-name mataz-cluster --nodegroup-name my-nodegroup --query "nodegroup.nodegroupName" --output text)
+        if [ "$NODEGROUP_EXISTS" == "my-nodegroup" ]; then
+          echo "Node group my-nodegroup exists, continuing with deployment..."
         else
-          echo "Node group2 does not exist, creating a new node group2..."
-          aws eks create-nodegroup --cluster-name mataz-cluster --nodegroup-name my-node-group2 \
+          echo "Node group my-nodegroup does not exist, creating a new node group..."
+          aws eks create-nodegroup --cluster-name mataz-cluster --nodegroup-name my-nodegroup \
           --node-role arn:aws:iam::123012261664:role/EKS-Node --subnets subnet-0175989c66fc0d32d subnet-0385591dd7d3cc1aa subnet-054b0fc732b88b22f \
           --instance-types t3.small --scaling-config minSize=1,maxSize=3,desiredSize=2 --region us-east-1
         fi
