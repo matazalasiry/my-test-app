@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: my-flask-app
-          image: 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:latest
+          image: 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:$GITHUB_SHA
           ports:
             - containerPort: 5000
