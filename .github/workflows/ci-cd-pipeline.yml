@@ -41,22 +41,22 @@ jobs:
     - name: Log in to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v1
       with:
-        registry: 123012261664.dkr.ecr.AWS_REGION.amazonaws.com
+        registry: 123012261664.dkr.ecr.us-east-1.amazonaws.com
       env:
-        AWS_REGION: AWS_REGION
+        AWS_REGION: us-east-1
 
     # 7. Build and Push Docker Image
     - name: Build and Push Docker Image
       run: |
-        docker build -t 123012261664.dkr.ecr.AWS_REGION.amazonaws.com/my-flask-repo:$GITHUB_SHA .
-        docker tag 123012261664.dkr.ecr.AWS_REGION.amazonaws.com/my-flask-repo:$GITHUB_SHA 123012261664.dkr.ecr.AWS_REGION.amazonaws.com/my-flask-repo:latest
-        docker push 123012261664.dkr.ecr.AWS_REGION.amazonaws.com/my-flask-repo:$GITHUB_SHA
-        docker push 123012261664.dkr.ecr.AWS_REGION.amazonaws.com/my-flask-repo:latest
+        docker build -t 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:$GITHUB_SHA .
+        docker tag 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:$GITHUB_SHA 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:latest
+        docker push 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:$GITHUB_SHA
+        docker push 123012261664.dkr.ecr.us-east-1.amazonaws.com/my-flask-repo:latest
 
     # 8. Deploy to EKS using kubectl
     - name: Deploy to EKS using kubectl
       env:
-        AWS_REGION: AWS_REGION
+        AWS_REGION: us-east-1
         EKS_CLUSTER_NAME: mataz-cluster
         KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
       run: |
